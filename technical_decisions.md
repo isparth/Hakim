@@ -47,15 +47,15 @@ The moat is "notes in the user's own words." Plain Markdown keeps them user-read
 ### 6. Decision taxonomy — **a versioned config file**
 The list of what counts as a consequential decision, grouped by severity, lives in a checked-in config file (YAML or Markdown). Authored and maintained by us; versioned so we can improve it over time. This is a core product artifact, not just config.
 
-### 7. Language / stack — **TypeScript + Node end-to-end** *(recommended, open)*
-One language across the hook scripts, the local service, and the companion app. Avoids a Python/JS split and keeps the whole thing approachable. *(See open sub-decisions.)*
+### 7. Language / stack — **TypeScript + Node end-to-end** *(confirmed)*
+One language across the hook scripts, the local service, and the companion app. Avoids a Python/JS split and keeps the whole thing approachable.
 
 ### 8. Auth & accounts — **none in v1**
 Single user, single machine, local files. No login, no server.
 > *Two-tier honesty:* Right call for v1. The moment you want the knowledge base to sync across devices or back up to the cloud, you'd add accounts and a sync layer — but that's a later problem.
 
 ### 9. Companion app framework — **Electron + Node/Express**
-The companion app is built with **Electron**, with a **Node + Express** server inside the main process. Express is the **front door the Claude Code hooks knock on**: hook scripts `POST` their event JSON to a localhost endpoint. Backend ↔ UI uses **Electron IPC** (`ipcMain`/`ipcRenderer`), not HTTP. Frontend is ordinary web (HTML/CSS/JS + a framework — TBD, e.g. React).
+The companion app is built with **Electron**, with a **Node + Express** server inside the main process. Express is the **front door the Claude Code hooks knock on**: hook scripts `POST` their event JSON to a localhost endpoint. Backend ↔ UI uses **Electron IPC** (`ipcMain`/`ipcRenderer`), not HTTP. Frontend is **React** (in TypeScript).
 
 **Why Electron over the alternatives:**
 
@@ -95,8 +95,6 @@ For low-consequence items, step 3 sends a notification instead and immediately a
 
 | Question | Notes |
 |---|---|
-| **Frontend framework** for the Electron app. | Electron is locked (decision #9); the in-window UI framework (React / Svelte / vanilla) is still open. Low-stakes — pick whatever's most comfortable. |
-| **Confirm TypeScript/Node** as the single stack. | Alternative: Python for the service (stronger LLM-orchestration ecosystem) + JS only for the app. Trades the single-language simplicity for a more natural LLM backend. |
 | **How to detect a "decision" from hook events** — the hardest technical risk. | A consequential choice (which database) may surface as a plan, a prompt, or a file write. Which hook(s) to watch, and how to reliably catch the decision *before* it's locked in, needs dedicated research/prototyping. |
 
 ---
