@@ -54,6 +54,26 @@ One language across the hook scripts, the local service, and the companion app. 
 Single user, single machine, local files. No login, no server.
 > *Two-tier honesty:* Right call for v1. The moment you want the knowledge base to sync across devices or back up to the cloud, you'd add accounts and a sync layer — but that's a later problem.
 
+### 9. Companion app framework — **Electron + Node/Express**
+The companion app is built with **Electron**, with a **Node + Express** server inside the main process. Express is the **front door the Claude Code hooks knock on**: hook scripts `POST` their event JSON to a localhost endpoint. Backend ↔ UI uses **Electron IPC** (`ipcMain`/`ipcRenderer`), not HTTP. Frontend is ordinary web (HTML/CSS/JS + a framework — TBD, e.g. React).
+
+**Why Electron over the alternatives:**
+
+| | Electron *(chosen)* | Tauri | Swift / SwiftUI |
+|---|---|---|---|
+| UI written in | Web | Web | Native (SwiftUI) |
+| Backend language | **Node — matches our stack** | Rust (language split) | Swift (language split) |
+| Platforms | Mac/Win/Linux | Mac/Win/Linux | Mac only |
+| Feel | Web-in-a-window | Web-in-a-window | Truly native, lightest |
+
+Electron wins for v1 because it keeps **everything in one language** (decision #7): the hooks, the Express service, and the app are all Node/TS, and the app can share code with the service. Its only real downside — bundle size / RAM — **doesn't matter for a local dev tool**.
+
+**The migration escape hatch (decided deliberately):**
+- **→ Tauri is cheap** if we ever need a leaner footprint: both use a web frontend, so the entire UI carries over and we'd only swap the Node backend for Rust. But per **YAGNI we don't pre-plan this** — Electron is production-grade (VS Code, Slack) and may well be the permanent answer. Move only if a real constraint appears.
+- **→ Swift is NOT a migration, it's a rewrite** — native UI means none of the web frontend transfers. So Electron is *not* a stepping stone to Swift. If a **native menu-bar companion** ever becomes core to the product, that's a from-scratch decision to make on its own merits, not something we drift into.
+
+> *Two-tier honesty:* For v1, run the Express server **inside Electron's main process** — one thing to launch. The grown-up version splits the Hakim service into a **separate daemon** so hooks can reach it even when the UI window is closed. Overkill now; the seam is there for later.
+
 ---
 
 ## How the block actually works (the load-bearing flow)
@@ -75,7 +95,7 @@ For low-consequence items, step 3 sends a notification instead and immediately a
 
 | Question | Notes |
 |---|---|
-| **Desktop vs. local web app** for the companion. | Both can be local-first. Desktop (Tauri/Electron) feels native and gets filesystem access cleanly; a local web app (localhost) is lighter to build but needs a local server. Tauri leans light, Electron leans familiar. |
+| **Frontend framework** for the Electron app. | Electron is locked (decision #9); the in-window UI framework (React / Svelte / vanilla) is still open. Low-stakes — pick whatever's most comfortable. |
 | **Confirm TypeScript/Node** as the single stack. | Alternative: Python for the service (stronger LLM-orchestration ecosystem) + JS only for the app. Trades the single-language simplicity for a more natural LLM backend. |
 | **How to detect a "decision" from hook events** — the hardest technical risk. | A consequential choice (which database) may surface as a plan, a prompt, or a file write. Which hook(s) to watch, and how to reliably catch the decision *before* it's locked in, needs dedicated research/prototyping. |
 
