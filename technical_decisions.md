@@ -18,7 +18,9 @@ Everything runs locally. No cloud, no server, no accounts.
 
 6. **The brain:** Claude. Cheap model (Haiku) for decision detection/classification; stronger model (Sonnet/Opus) for lessons and feedback. Prompt caching on the system prompt + taxonomy.
 
-7. **Brain auth / who pays:** Reuse the user's existing Claude Code authentication via the **Claude Agent SDK** — no separate login, and Claude Max users' calls draw from their subscription, not a separate API bill. **Fallback:** BYOK (user pastes their own Anthropic API key). Cost always sits with the user, never with us. *(Verify: Anthropic ToS on programmatic subscription use; if disallowed, BYOK becomes primary.)*
+7. **Brain auth / who pays:** *(confirmed allowed — see rules below)* Hakim runs locally and **inherits the user's existing Claude Code auth** via the **Claude Agent SDK**. Calls draw from the user's own monthly **Agent SDK credit** (Pro $20 / Max 5x $100 / Max 20x $200, starting June 15 2026; separate from chat limits, per-user, no rollover). **Fallback:** BYOK (user's own Anthropic API key). Cost always sits with the user, never with us.
+   - **Hard rule:** never build "Login with Claude" into Hakim, and never route requests through a hosted service on the user's behalf — Anthropic prohibits both. We only ever inherit auth the user set up themselves, locally.
+   - **Must be token-frugal:** the subscription credit is capped and stops when exhausted. Haiku for the high-volume detection pass + prompt caching, so we don't burn the user's monthly credit.
 
 8. **Storage:** Local only. We store **knowledge context** — what the user has already learned — as Markdown files (Obsidian-compatible), one note per concept with date + tags. No other database.
 
