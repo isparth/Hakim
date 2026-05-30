@@ -16,11 +16,13 @@ Everything runs locally. No cloud, no server, no accounts.
 
 5. **Language/stack:** TypeScript + Node end-to-end (hooks, service, app).
 
-6. **The brain:** Anthropic Claude API. Cheap model (Haiku) for decision detection/classification; stronger model (Sonnet/Opus) for lessons and feedback. Prompt caching on the system prompt + taxonomy.
+6. **The brain:** Claude. Cheap model (Haiku) for decision detection/classification; stronger model (Sonnet/Opus) for lessons and feedback. Prompt caching on the system prompt + taxonomy.
 
-7. **Storage:** Local only. We store **knowledge context** — what the user has already learned — as Markdown files (Obsidian-compatible), one note per concept with date + tags. No other database.
+7. **Brain auth / who pays:** Reuse the user's existing Claude Code authentication via the **Claude Agent SDK** — no separate login, and Claude Max users' calls draw from their subscription, not a separate API bill. **Fallback:** BYOK (user pastes their own Anthropic API key). Cost always sits with the user, never with us. *(Verify: Anthropic ToS on programmatic subscription use; if disallowed, BYOK becomes primary.)*
 
-8. **Decision taxonomy:** A versioned config file (YAML or Markdown) listing what counts as a consequential decision, grouped by severity.
+8. **Storage:** Local only. We store **knowledge context** — what the user has already learned — as Markdown files (Obsidian-compatible), one note per concept with date + tags. No other database.
+
+9. **Decision taxonomy:** A versioned config file (YAML or Markdown) listing what counts as a consequential decision, grouped by severity.
 
 ## The intercept flow
 
