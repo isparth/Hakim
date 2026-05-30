@@ -1,78 +1,60 @@
-# UI/UX — Feature Requirements (v1)
+# UI/UX — Look & Feel (v1)
 
-Feature-level only. *What* the interface must do, not how it looks. Hakim is an Electron + React companion app running alongside Claude Code.
+How the interface should look and feel. Not a pixel spec — a description of the intended visual language and interaction feel. Hakim is an Electron + React companion to Claude Code.
 
-## Guiding constraints
+## Overall feel
 
-- **Two interruption tiers, honored visually.** Blocking intercepts demand attention; lesson opportunities never steal it.
-- **The user is looking at their terminal, not Hakim.** Hakim must pull them in when it matters and stay out of the way when it doesn't.
-- **Hands the decision back, always.** No UI affordance ever lets the user offload the choice to Hakim.
+- **A calm dev-tool companion, not an app that shouts.** It should feel native beside a code editor and a terminal: quiet, focused, confident. The opposite of a gamified, badge-pushing study app and the opposite of a nagging paperclip.
+- **Dark-mode first.** Editor-adjacent palette — deep neutral background, one restrained accent color, high-contrast text. Light mode is a secondary theme.
+- **Mentor tone, visually.** Spacious, unhurried, lots of breathing room. Prose in a clean sans; anything code-ish (file names, commands, the decision itself) in monospace so it reads as "from your project."
+- **Motion is subtle.** Gentle fades and slides, never bouncy or attention-grabbing for its own sake. Movement is reserved to signal the one thing that matters: the agent just paused.
 
----
+## Form factor
 
-## Features
-
-### 1. Decision Intercept (blocking)
-The core moment. Triggered when a high-consequence decision is detected.
-- Surfaces the decision in plain language ("You're about to pick a database").
-- Asks **"What's your call, and why?"** — user states their choice *and* reasoning in their own words.
-- An explicit **"I don't know — teach me"** path (never the default, never pre-selected).
-- Cannot be dismissed/ignored to bypass the decision — the agent is paused until resolved.
-- Clear signal that the agent is **paused/waiting** because of this.
-
-### 2. Reveal & feedback
-After the user commits to a call.
-- Shows whether they were right and the tradeoffs underneath.
-- For the "teach me" path: mini-lesson → then **bounces the decision back** ("Now what would you choose?") → feedback. The user still has to choose.
-
-### 3. Two-tier explanation
-Used in every reveal/lesson.
-- Presents **both tiers clearly distinguished**: the right call *for this project now*, and what you'd reach for *in production at scale* (and why that's overkill here).
-- Must read as two honest, separate answers — not one hedged blob.
-
-### 4. Takeaway capture
-Closes every decision/lesson.
-- A field for the user to **write the takeaway in their own words** (not pre-filled, not optional to engage with).
-- Saved to the knowledge base; confirms it was saved.
-
-### 5. Lesson Opportunity (non-blocking)
-Triggered when a teachable concept is nearby but no decision is being forced.
-- A **non-blocking offer**: "Working on auth — want to learn how it works?" with **Skip / Surface-level / Go deep**.
-- Must not pause the agent or steal focus; easy to ignore.
-- Only appears for concepts not already in the knowledge base.
-
-### 6. Quiz / spaced repetition
-When a *known* concept resurfaces.
-- A quick **gut-check quiz** instead of a lesson ("You learned queues a while back — quick check").
-- Lightweight; gives feedback on the answer.
-
-### 7. Knowledge base browser
-The user's growing record.
-- Browse/search concepts they've learned, with date and tags.
-- View each note (in the user's own words).
-- Reachable any time, not only during intercepts.
-
-### 8. Notifications & presence
-How Hakim reaches a user who's focused on the terminal.
-- **Menu-bar/system-tray presence** showing Hakim is running.
-- **System notification** to pull the user into a blocking intercept.
-- **Quieter notification** for non-blocking lesson offers.
-- Clear **connection status**: is Hakim attached to an active Claude Code session.
-
-### 9. Settings
-- **Auth:** inherit the user's local Claude Code auth (default) or enter a BYOK API key.
-- Knowledge base location.
-- Notification preferences (e.g. mute lesson offers).
-
-### 10. First-run / onboarding
-- Explain what Hakim does and the two interruption tiers.
-- Confirm it's connected to Claude Code and auth is working.
-- Keep it short — get to a working state fast.
+Two surfaces:
+1. **A menu-bar/tray presence** — a small icon always there. Calm when idle; a subtle accent dot when an intercept is waiting. Click for a compact dropdown: connection status, "open Hakim," quick mute.
+2. **The main window** — a focused single-column app for intercepts and lessons, with the knowledge base living in a wider two-pane layout.
 
 ---
 
-## Explicitly out of scope (v1)
+## The surfaces
 
-- Visual design, branding, layout, theming — this file is feature-level only.
-- A full progress/analytics dashboard (P2 in the spec).
-- In-app editing of the decision taxonomy.
+### Decision Intercept (blocking) — center stage
+The most important screen. When a high-consequence decision is caught, a **focused card window comes to the front** over a dimmed backdrop, so it's unmistakable the work has stopped.
+- **Top:** a small, calm "⏸ Agent paused" marker in the accent color — present but not alarming.
+- **Middle:** the decision stated in plain language, with the concrete project detail in monospace ("about to add **Supabase** as your database").
+- **The prompt — "What's your call, and why?"** — a roomy text input that invites real sentences, not a one-word answer. Any preset choices sit as understated chips above it.
+- **Bottom, deliberately quiet:** a plain-text **"I don't know — teach me"** link — visible, never a big button, never pre-selected. The visual weight pushes the user toward attempting their own call first.
+
+### Reveal & feedback — same card, calm transition
+After they commit, the card **transitions in place** (no new window) to the verdict.
+- A clear but understated right/not-quite signal — a check or a gentle correction, never a red buzzer or a celebration.
+- Below it, the tradeoffs, in readable prose.
+
+### Two-tier explanation — visibly two answers
+Whenever Hakim explains, the two tiers are **laid out as two distinct, side-by-side (or stacked) blocks**, clearly labeled — e.g. **"For this project, now"** (visually primary, full-strength) and **"At production scale"** (secondary, slightly muted, marked as the senior/future view). The split must be obvious at a glance so they never blur into one hedged paragraph.
+
+### Takeaway capture — looks like a note
+Closing every decision: a **lined, note-like text area** that visually echoes the knowledge base, signalling "this becomes your note." Empty by default — it should feel like *their* page, not a form. A small "saved to your knowledge base" confirmation after.
+
+### Lesson Opportunity (non-blocking) — a quiet corner toast
+The deliberate opposite of the intercept. A **small, low-contrast toast slides into a bottom corner**, never covering anything, never taking focus. One line ("Working on auth — want to learn how it works?") and three soft buttons: **Skip · Surface · Go deep**. Ignored cleanly if untouched; the terminal keeps running behind it.
+
+### Quiz / spaced repetition — a light card
+For a concept they already know: a **compact single-question card**, friendlier and lighter than an intercept. Quick to answer, with brief feedback. Reads as a check-in, not a test.
+
+### Knowledge base — an Obsidian-like reading space
+The wider, two-pane view:
+- **Left:** a searchable list of concepts, each showing its tag(s) and date, newest or most-relevant first.
+- **Right:** the selected note, rendered as clean readable Markdown — *their* words, lightly styled.
+- The overall feel is a personal notebook that's visibly **growing**, not a database admin screen.
+
+### Settings & onboarding — minimal and plain
+- **Settings:** a short, plain list — auth (inherit Claude Code, or paste a key), knowledge-base location, notification/mute toggles. No sprawling preference panels.
+- **First run:** a few calm steps that explain the two interruption styles, confirm the Claude Code connection is live, then get out of the way fast.
+
+---
+
+## Visual hierarchy principle
+
+The whole look hangs off **one contrast**: the **blocking intercept owns the screen** (front-and-center card, dimmed world behind, the accent reserved for "paused"), while the **lesson offer is the smallest, quietest thing on screen** (corner, low-contrast, dismissible). A user should be able to tell which kind of moment it is from across the room, before reading a word.
