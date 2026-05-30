@@ -50,6 +50,8 @@ Developers using AI coding agents (Claude Code, Cursor, etc.) are getting code w
 ### Must-Have (P0)
 
 **Decision Intercept**
+- Hakim observes the coding agent session passively — it has full context of what's happening in Claude Code, Cursor, or equivalent without the user needing to connect or configure anything per project.
+- Hakim detects consequential decisions by reading the session context and matching it against a **decision taxonomy file** — a maintained list of decision types grouped by how consequential they are (e.g. choosing a database > choosing a naming convention). Decisions below the threshold are ignored.
 - When a consequential decision appears in the user's project, Hakim intercepts and asks: *"What's your call, and why?"*
 - The user either answers or chooses *"I don't know — teach me."*
   - If they answer: Hakim reveals whether they were right and explains the tradeoffs underneath.
@@ -92,7 +94,4 @@ Developers using AI coding agents (Claude Code, Cursor, etc.) are getting code w
 
 | Question | Who needs to answer |
 |---|---|
-| How does Hakim detect that a consequential decision is being made — does the user trigger it manually, or does Hakim infer from context? This affects how reliable and trustworthy the intercept feels. | Product |
-| What is the threshold between a consequential decision and noise? (e.g. variable naming = not consequential; choosing a database = consequential.) Who defines this, and can it be wrong? | Product |
-| How opinionated is Hakim when it reveals "the right answer"? Some decisions have a clear better choice; others are genuinely contextual. Where's the line between confident guidance and false certainty? | Product |
-| Does the user explicitly connect Hakim to their project (giving it context), or does Hakim observe passively? The richer the context, the more grounded the lessons — but setup friction is a real cost. | Product |
+| How opinionated is Hakim when it reveals "the right answer"? Some decisions have a clear better choice; others are genuinely contextual. Where's the line between confident guidance and false certainty? Needs a dedicated session to work through. | Product |
