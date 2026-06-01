@@ -1,0 +1,7 @@
+# Hakim runtime state (keep .hakim/config.json tracked, ignore the rest)
+.hakim/decisions.jsonl
+.hakim/notes/
+
+# Python
+__pycache__/
+*.pyc
