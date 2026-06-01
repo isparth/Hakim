@@ -1,0 +1,15 @@
+{
+  "name": "hakim-marketplace",
+  "owner": { "name": "Parth Sharma Poudel" },
+  "metadata": {
+    "description": "Hakim — teaches engineering judgment while you build."
+  },
+  "plugins": [
+    {
+      "name": "hakim",
+      "source": "./hakim",
+      "version": "0.1.0",
+      "description": "A work terminal hands consequential decisions to a teacher terminal that runs two-tier lessons, then sends back one clean line. Includes a full dev-workflow skill group (PRD, tech decisions, setup, tasks, TDD, QA) with an independent reviewer agent."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "name": "hakim",
+  "version": "0.1.0",
+  "description": "Teaches engineering judgment while you build. A work terminal hands consequential decisions to a teacher terminal, which runs a two-tier lesson (right-for-now vs the grown-up version), then sends back one clean line — keeping the work context clean.",
+  "author": { "name": "Parth Sharma Poudel" },
+  "keywords": ["teaching", "mentor", "decisions", "learning", "judgment"],
+  "hooks": "./hooks/hooks.json",
+  "mcpServers": {
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}" }
+    }
+  }
+}
