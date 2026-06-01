@@ -25,32 +25,27 @@ People who want to learn — explicitly not people who already know. Beginners t
 
 ## The two core teaching moments
 
-### 1. The Decision Intercept (mandatory — a choice is being made)
-When the agent is about to make a consequential decision (tech stack, database, architecture), the workflow pauses and runs this loop:
+### 1. The Decision Intercept
+When the agent is about to make a consequential decision (tech stack, database, architecture).
 
 ```
-Decision appears
-   → "What's your call, and why?"  (in your own words)
-       → User chooses
-           → Reveal: were they right? + the tradeoffs underneath
-       → OR user hits "I don't know — teach me"
-           → Mini-lesson (concrete, in the context of THEIR project)
-           → Bounce the decision back: "Now what would you choose?"
-           → Feedback
-   → Capture: user writes the takeaway in their own words → saved to knowledge base
-   → Resume building
+Decision detected
+
+teaches a mini lesson, similar to chatgpt Study mode. Uses context from the project itself (or simnilar example) to teach concepts.
+Example decision that is detected, what backend language do you want to choose for this project ?
+think about the options here, node, python, go
+here the agent teaches you so you have better understanding, agent goes through differences of the 2 etc.
+also the agent provides a framework of thinking to make the decision, this should use concepts in books etc
+to make this decisions you should think about this, this is why. 
+
 ```
 
-The "I don't know" escape hatch never lets the user offload the judgment — the worst case is "learn the thing, then you still have to choose."
-
-### 2. The Lesson Opportunity (invitational — no fork, just a teachable concept nearby)
-When the agent is touching a teachable concept (e.g. auth) but there's no decision to resolve, the workflow offers — it doesn't interrupt:
+### 2. The Lesson Opportunity
+When the agent is touching a teachable concept (e.g. auth) but there's no decision to resolve.
 
 > "I see you're working on auth — want to learn how it works? Skip / Surface-level / Go deep"
 
-The work continues regardless; the lesson is opt-in, and the user picks the depth in the moment.
 
-The bar for offering a lesson (so it doesn't become a nagging paperclip): the primary gate is novelty against the knowledge base — only offer if we haven't already taught it. (Cheapest, most powerful filter, and it reuses the memory system. Importance and project-centrality can layer on later.)
 
 ## The signature feature: two-tier decisions
 Every decision is taught in two tiers, honest in both directions:
@@ -59,9 +54,9 @@ Every decision is taught in two tiers, honest in both directions:
 
 Why this is the heart of the product: real engineering advice sounds insane for a weekend project (no one needs read replicas for their todo app). Telling a beginner the "grown-up" version without the "for now" version makes them quit. Doing both respects where they are and installs the senior mental model. Possible tagline: **learn the shortcut and the real thing, every time.**
 
-## The memory layer (the defensibility)
+## The memory layer 
 Knowledge-base integration (Obsidian or similar) gives the product memory the raw agent structurally cannot have. This is the moat — "just ask Claude" can't do it:
 
 - Never re-teach the same concept twice.
 - Notes are written in the user's own words, dated, tagged.
-- When a known concept resurfaces, quiz instead of teach (spaced repetition): "You learned queues a while back — quick gut check before we move on."
+- When a known concept resurfaces, quiz instead of teach (spaced repetition): "You learned queues a while back — quick gut check before we move on." (this is not in the MVP)
