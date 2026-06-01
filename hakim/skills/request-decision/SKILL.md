@@ -69,14 +69,27 @@ This prints a decision id like `dec_a1b2`. Keep it.
 > I've hit a real decision here — *which database to use*. I've sent it to your **teacher
 > terminal**. Head over there to think it through and decide; I'll pick up the moment you do.
 
-Then block on it:
+Then block on it. Run this with the Bash tool's **timeout set to its max (`600000` ms ≈ 10 min)** so
+the wait window isn't cut short:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT:-hakim}/scripts/hakim.py" wait dec_a1b2
+python3 "${CLAUDE_PLUGIN_ROOT:-hakim}/scripts/hakim.py" wait dec_a1b2 --timeout 570
 ```
 
-This returns one line, e.g.
-`{"choice":"Postgres","why":"data has clear links","future_note":"replicas later — overkill now"}`
+One of two things comes back:
+
+- **The choice** — a JSON line, e.g.
+  `{"choice":"Postgres","why":"data has clear links","future_note":"replicas later — overkill now"}`
+  → go to Step 5.
+- **`hakim: timed out waiting for resolution of dec_a1b2`** (exit code 2) → the user simply hasn't
+  decided yet. Tell them plainly you're still holding for the teacher terminal, then **run the exact
+  same `wait` command again.** Repeat for as long as it takes.
+
+**Never stop waiting on your own.** The bounded `--timeout` is *only* there so a single Bash call
+stays under Claude Code's ~10-minute cap — without it, a longer lesson gets killed mid-wait and
+surfaces as an error. So if you ever see a raw error instead of the clean timeout message, treat it
+the same way: just run the `wait` again. Only the user resolving the decision (or ending the
+session) ends the wait.
 
 **LOW stakes → don't wait.** You've already logged it with `request`. Proceed with your
 `leaning`. The teacher may turn it into a relaxed lesson later; you don't block.

@@ -5,13 +5,17 @@ description: Start the Hakim teacher loop — listen for decisions from the work
 You are the **teacher terminal** for Hakim. Your whole job is to wait for decisions coming from the
 user's work terminal and turn each one into a lesson. Run this loop:
 
-1. **Listen.** Block until the next decision arrives:
+1. **Listen.** Block until the next decision arrives. Give this Bash call its **max timeout
+   (`600000` ms ≈ 10 min)** so the listen window isn't cut short:
 
    ```bash
-   python3 "${CLAUDE_PLUGIN_ROOT:-hakim}/scripts/hakim.py" watch
+   python3 "${CLAUDE_PLUGIN_ROOT:-hakim}/scripts/hakim.py" watch --timeout 570
    ```
 
-   This prints one decision record (JSON) when the work terminal hands one off.
+   It prints one decision record (JSON) the instant the work terminal hands one off. If it instead
+   prints `hakim: timed out waiting for a decision` (exit 2) — or errors for any reason — nothing
+   arrived in that window; just run it again (the `--timeout` only keeps each call under Claude
+   Code's ~10-minute Bash cap; it is **not** a reason to stop listening — see step 4).
 
 2. **Teach.** Use the **teach-decision** skill to run the lesson on that record: make the decision
    visible, give the framework, give the honest two-tier answer, and hand the decision back to the

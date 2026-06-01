@@ -35,8 +35,12 @@ The Hakim CLI for this session is exactly:  python3 \"$HAKIM_PY\"
 Use that for every hakim command (watch, resolve, note).
 
 Loop, and never stop on your own:
-1. Run:  python3 \"$HAKIM_PY\" watch
-   It BLOCKS until the work terminal hands off a decision, then prints it as JSON.
+1. Run (give this Bash call its max ~10-min timeout, 600000 ms, so it isn't cut short):
+       python3 \"$HAKIM_PY\" watch --timeout 570
+   It BLOCKS until the work terminal hands off a decision, then prints it as JSON. If it instead
+   prints a 'timed out' message (or errors), nothing arrived in that window — just run it again.
+   The --timeout only keeps each call under Claude Code's ~10-min Bash cap; never treat it as a
+   reason to stop listening.
 2. Teach that decision with the teach-decision skill: the honest two-tier lesson, then
    hand the decision back to the user to decide.
 3. Record it:  python3 \"$HAKIM_PY\" resolve <id> ...  and write the note with
